@@ -111,24 +111,28 @@ bool isStringNumeric(const char* str)
 
 ```cpp
 // 在原字符串基础上转换, 会修改原字符串
-std::string& InPlaceLowercase(std::string& s) {
+std::string& InPlaceLowercase(std::string& s)
+{
     std::transform(s.begin(), s.end(), s.begin(), ::tolower);
     return s;
 }
 
-std::string& InPlaceUppercase(std::string& s) {
+std::string& InPlaceUppercase(std::string& s)
+{
     std::transform(s.begin(), s.end(), s.begin(), ::toupper);
     return s;
 }
 
 // 在新字符串基础上转换, 不会修改原字符串
-std::string StrToLower(const std::string& s) {
+std::string StrToLower(const std::string& s)
+{
     std::string res(s);
     std::transform(res.begin(), res.end(), res.begin(), ::tolower);
     return res;
 }
 
-std::string StrToUpper(const std::string& s) {
+std::string StrToUpper(const std::string& s)
+{
     std::string res(s);
     std::transform(res.begin(), res.end(), res.begin(), ::toupper);
     return res;
@@ -174,36 +178,65 @@ size_t convert(char buf[], T value)
 
 - 方法2：
 
-```c
-
-const char digits[] = "9876543210123456789";
-const char* zero = digits + 9;
-
-template<typename T>
-size_t convert(char buf[], T value)
+```cpp
+// Converts string to integral type T. If string is not convertible, T() is returned.
+template<typename T, typename String>
+T to_integral(String const& s, T const errorval = T())
 {
-    T i = value;
-    char* p = buf;
+    T ret{};
 
-    do {
-        int lsd = static_cast<int>(i % 10);
-        i /= 10;
-        *p++ = zero[lsd];
-    } while (i != 0);
-
-    if (value < 0) {
-        *p++ = '-';
+    auto it = s.cbegin();
+    if (it != s.cend() && (*it == '-' || *it == '+')) {
+        ++it;
     }
-    *p = '\0';
-    std::reverse(buf, p);
 
-    return p - buf;
+    if (it == s.cend()) {
+        return errorval;
+    }
+
+    for (; it != s.cend(); ++it) {
+        auto const& c = *it;
+        if (c < '0' || c > '9') {
+            return errorval;
+        }
+        ret *= 10;
+        ret += c - '0';
+    }
+
+    if (!s.empty() && s.front() == '-') {
+        return ret *= static_cast<T>(-1);
+    }
+    else {
+        return ret;
+    }
 }
 
 ```
 
-完整代码及测试代码详见：[010-string_number_convert](https://github.com/AnonymousRookie/useful-codes/blob/master/c_and_cplusplus/010-string_number_convert.cpp)
+- 方法3：
 
+```cpp
+// number -> string
+template <typename T>
+std::string NumberToString(T value)
+{
+    std::ostringstream os;
+    os << value;
+    return os.str();
+}
+// string -> number
+template <typename T>
+inline T StringToNumber(const std::string& str)
+{
+    std::stringstream ss;
+    T n = 0;
+    ss << str;
+    ss >> n;
+    return n;
+}
+```
+
+完整代码及测试代码详见：[010-string_number_convert](https://github.com/AnonymousRookie/useful-codes/blob/master/c_and_cplusplus/010-string_number_convert.cpp)
 
 
 
