@@ -1,46 +1,60 @@
-# Basic
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
 title: ZhangJie
-subtitle: Personal blog
-description: Welcome to my blog
-# 头像里面的标题
-avatarTitle: ZhangJie
-# 头像里面的描述
-avatarDesc: IT little bird
+brief-intro: Software Development Engineer
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://anonymousrookie.github.io/" # the base hostname & protocol for your site
 
+permalink: /:year/:month/:day/:title/
 
-# Social
-social:
-    weibo:
-    github: AnonymousRookie
-    # twitter:
-    mail: 357688981@qq.com
+# other links
+# twitter_username:
+# facebook_username:
+github_username:  AnonymousRookie
+email: 357688981@qq.com
+# weibo_username:
+# zhihu_username:
+# linkedIn_username:
+# dribbble_username:
 
+description_footer: 本站记录个人工作学习过程中的一些心得体会！
 
-permalink: /:year/:month/:title/
-# Format
-highlighter: rouge
+# comments
+# two ways to comment, only choose one, and use your own short name
+# 两种评论插件，选一个就好了，使用自己的 short_name
+# duoshuo_shortname:
+# disqus_shortname:
 
-textColor: #FF0000
+# statistic analysis 统计代码
+# 百度统计 id，将统计代码替换为自己的百度统计id，即
+# hm.src = "//hm.baidu.com/hm.js?xxxxxxxxxxxx";
+# xxxxx字符串
+# baidu_tongji_id:
+# google_analytics_id: # google 分析追踪id
 
-# supported colors: blue, green, purple, red, orange or slate. If you need clear, leave it empty.
-cover_color: clear
+# Build settings
+markdown: kramdown
 
-# The blog button should not be removed.
-blog_button:
-    title: 博客主页
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 
-# Navigation buttons in the front page.s
-nav:
-    - {title: 所有文章, description: archive, url: '/archive'}
-    - {title: 标签, description: tags, url: '/tags'}
-    - {title: 关于我, description: about, url: '/about'}
+# port
+# port: 1234
 
+# url
+category_dir: category/
+tag_dir: tag/
 
-# Pagination
-gems: [jekyll-paginate,jekyll-sitemap]
+# excerpt
+excerpt_separator: "\n\n\n\n"
 
-# 开启分页功能
-paginate: 10
-paginate_path: "page/:num/"
-
-
+# paginate
+gems: [jekyll-paginate]
+paginate: 6
