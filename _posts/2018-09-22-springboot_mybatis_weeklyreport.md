@@ -24,37 +24,37 @@ author: ZhangJie
 
 - 登录页面
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_01.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_01.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_01.png](https://AnonymousRookie.github.io/images/201809/20180922_01.png)
 
 - 系统主页面
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_02.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_02.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_02.png](https://AnonymousRookie.github.io/images/201809/20180922_02.png)
 
 ### 基于上述系统开发的周报系统
 
 - 登录页面
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_03.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_03.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_03.png](https://AnonymousRookie.github.io/images/201809/20180922_03.png)
 
 - 系统主页面
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_04.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_04.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_04.png](https://AnonymousRookie.github.io/images/201809/20180922_04.png)
 
 - 周报填写页面
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_05.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_05.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_05.png](https://AnonymousRookie.github.io/images/201809/20180922_05.png)
 
 - 周报查询页面
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_06.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_06.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_06.png](https://AnonymousRookie.github.io/images/201809/20180922_06.png)
 
 - 周报统计页面
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_07.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_07.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_07.png](https://AnonymousRookie.github.io/images/201809/20180922_07.png)
 
 - 周报导出页面
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_08.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_08.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_08.png](https://AnonymousRookie.github.io/images/201809/20180922_08.png)
 
 
 ## 开发细节总结
@@ -63,11 +63,11 @@ author: ZhangJie
 
 看了一下bootdo的源码，发现在登录提交表单时，密码居然没有进行加密处理。本人通过Wireshark进行了抓包，轻松的获取了提交的用户名与密码，这是极其不安全的。
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_09.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_09.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_09.png](https://AnonymousRookie.github.io/images/201809/20180922_09.png)
 
 因此，在开发周报系统时，对登录提交的的密码通过MD5进行了简单的加密，当然数据库中的密码也是通过密文进行存储的。再次抓包发现密码是经过加密后的一长串字符，安全性至少稍微提高了那么一点。
 
-![https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_10.png](https://github.com/AnonymousRookie/AnonymousRookie.github.io/tree/master/images/201809/20180922_10.png)
+![https://AnonymousRookie.github.io/images/201809/20180922_10.png](https://AnonymousRookie.github.io/images/201809/20180922_10.png)
 
 
 - 周报填写模块
