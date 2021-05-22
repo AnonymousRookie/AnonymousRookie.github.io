@@ -144,6 +144,99 @@ L2缓存用来存放近来使用过的若干兆字节的内存字。
 条件变量作为一种同步手段，作用类似于一个栅栏。对于条件变量，线程可以有两种操作，首先线程可以等待条件变量，一个条件变量可以被多个线程等待。其次，线程可以唤醒条件变量，此时某个或所有等待此条件变量的线程都会被唤醒并继续执行。也就是说，使用条件变量可以让许多线程一起等待某个事件的发生，当事件发生时（条件变量被唤醒），所有的线程可以一起恢复执行。
 
 
+- 自旋锁(spinlock)
+
+自旋锁不会引起调用者睡眠，而是一直循环在那里看是否该自旋锁的持有者已经释放了锁，"自旋"一词就是因此而得名。锁一旦被释放，就会被等待的线程立即获取，而不需要经过唤醒和上下文切换。
+
+消耗过多CPU资源：如果申请不成功，申请者将一直循环判断，这无疑降低了CPU的使用率。
+
+自旋锁是一种比较低级的资源保护方式，比较适用于保护访问耗时较短的资源。
+
+自旋锁等待期间，线程的状态不会改变，线程一直是用户态并且是活动的(active)。
+
+
+#### 实现生产者-消费者模型
+
+```cpp
+#include <vector>
+#include <thread>
+#include <mutex>
+#include <deque>
+#include <condition_variable>
+
+template <typename T>
+class BlockingQueue 
+{
+public:
+    BlockingQueue() {}
+    ~BlockingQueue() {}
+
+    T get() {
+        std::unique_lock<std::mutex> lock(mutex_);
+        while (queue_.empty()) {
+            cv_.wait(lock);
+        }
+        
+        T x = queue_.front();
+        queue_.pop_front();
+        return x;
+    }
+
+    void put(const T& x) {
+        std::unique_lock<std::mutex> lock(mutex_);
+        queue_.push_back(x);
+        cv_.notify_one();
+    }
+
+    size_t size() {
+        std::unique_lock<std::mutex> lock(mutex_);
+        return queue_.size();
+    }
+
+private:
+    std::deque<T> queue_;
+    std::mutex mutex_;
+    std::condition_variable cv_;
+};
+
+
+BlockingQueue<int> blockingQueue;
+
+void produce(const std::string& name)
+{
+    int n = 0;
+    for (;;) {
+        blockingQueue.put(n);
+        printf("%s 生产：%d, 队列大小：%d\n", name.c_str(), n, blockingQueue.size());
+        ++n;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    }
+}
+
+void consume(const std::string& name)
+{
+    for (;;) {
+        int n = blockingQueue.get();
+        printf("%s 消费：%d, 队列大小：%d\n", name.c_str(), n, blockingQueue.size());
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+}
+
+int main()
+{
+    std::thread p1(produce, "生产者1");
+    std::thread p2(produce, "生产者2");
+    std::thread c(consume, "消费者");
+
+    p1.join();
+    p2.join();
+    c.join();
+
+    return 0;
+}
+```
+
+
 #### UNIX进程间通信方式(IPC)
 
 1. 管道（Pipe）：管道可用于具有亲缘关系进程间的通信，允许一个进程和另一个与它有共同祖先的进程之间进行通信。
@@ -292,8 +385,9 @@ Concurrency provides a way to structure a solution to solve a problem that may (
 
 
 
+## 缓冲区溢出
 
-
+当一个超长的数据进入到缓冲区时，超出部分就会被写入其他缓冲区，其他缓冲区存放的可能是数据、下一条指令的指针，或者是其他程序的输出内容，这些内容都被覆盖或者破坏掉。可见一小部分数据或者一套指令的溢出就可能导致一个程序或者操作系统崩溃。
 
 
 
