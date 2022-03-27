@@ -159,6 +159,138 @@ Transactions: NO
 10 rows in set (0.00 sec)
 ```
 
+
+- 版本查询
+
+```
+mysql> status;
+--------------
+D:\MySQL\MySQL Server 5.0\bin\mysql.exe  Ver 14.12 Distrib 5.0.89, for Win32 (ia32)
+
+Connection id:          3
+Current database:       cookbook
+Current user:           root@localhost
+SSL:                    Not in use
+Using delimiter:        ;
+Server version:         5.0.89-community-nt MySQL Community Edition (GPL)
+Protocol version:       10
+Connection:             localhost via TCP/IP
+Server characterset:    utf8
+Db     characterset:    utf8
+Client characterset:    gbk
+Conn.  characterset:    gbk
+TCP port:               3306
+Uptime:                 49 min 34 sec
+
+Threads: 2  Questions: 41  Slow queries: 0  Opens: 17  Flush tables: 1  Open tables: 1  Queries per second avg: 0.014
+--------------
+```
+
+
+```
+mysql> select version();
++---------------------+
+| version()           |
++---------------------+
+| 5.0.89-community-nt |
++---------------------+
+1 row in set (0.00 sec)
+```
+
+
+- 常见语句
+
+```
+:: 查看表结构
+desc book;
+
+:: 修改表book的author列的长度
+alter table book modify author varchar(50); 
+
+:: 删除price列
+alter table book drop price;
+
+:: 修改表名book 为 books
+rename table book to books;
+
+:: 修改表的字符集
+alter table books character set GB2312;
+```
+
+
+
+#### 连接查询(join)
+
+将多个表的字段进行连接，可以指定连接条件。
+
+- 内连接(inner join)
+
+```
+-- 默认就是内连接，可省略inner。
+-- 只有数据存在时才能发送连接，即连接结果不能出现空行。
+-- on表示连接条件，其条件表达式与where类似，也可以省略条件（表示条件永远为真）
+-- 也可用where表示连接条件。
+-- 还有using, 但需字段名相同。using(字段名)
+
+select * from table_a, table_b where table_a.id = table_b.id;
+-- 等价于
+select * from table_a inner join table_b on table_a.id = table_b.id;
+```
+
+- 交叉连接(cross join)
+
+```
+-- 没有条件的内连接
+select * from tb1 cross join tb2;
+```
+
+- 外连接(outer join)
+```
+-- 如果数据不存在，也会出现在连接结果中。
+```
+
+- 左外连接 left join
+```
+-- 如果数据不存在，左表记录会出现，而右表为null填充
+```
+
+- 右外连接 right join
+```
+-- 如果数据不存在，右表记录会出现，而左表为null填充
+
+right join是另外一种外部连接，与left join类似，
+只不过将左表和右表的角色调过来。
+从语义上讲，right join强制匹配过程为右表的每一条记录产生一行，
+即使左表中不存在相应的行。
+```
+
+内连接、外连接对比:
+
+```
+select * from artist inner join painting on artist.a_id = painting.a_id;
++------+----------+------+------+-------------------+-------+-------+
+| a_id | name     | a_id | p_id | title             | state | price |
++------+----------+------+------+-------------------+-------+-------+
+|    1 | Da vinci |    1 |    1 | The Last Supper   | IN    |    34 |
+|    1 | Da vinci |    1 |    2 | The Mona Lisa     | MI    |    88 |
+|    5 | Renoir   |    5 |    6 | Les Deux Soeurs   | NE    |    76 |
+|    3 | Van Gogh |    3 |    3 | Starry Night      | KY    |    43 |
++------+----------+------+------+-------------------+-------+-------+
+
+mysql> select * from artist left join painting on artist.a_id=painting.a_id;
++------+----------+------+------+-------------------+-------+-------+
+| a_id | name     | a_id | p_id | title             | state | price |
++------+----------+------+------+-------------------+-------+-------+
+|    1 | Da vinci |    1 |    1 | The Last Supper   | IN    |    34 |
+|    1 | Da vinci |    1 |    2 | The Mona Lisa     | MI    |    88 |
+|    2 | Monet    | NULL | NULL | NULL              | NULL  |  NULL |
+|    4 | Picasso  | NULL | NULL | NULL              | NULL  |  NULL |
+|    5 | Renoir   |    5 |    6 | Les Deux Soeurs   | NE    |    76 |
+|    3 | Van Gogh |    3 |    3 | Starry Night      | KY    |    43 |
++------+----------+------+------+-------------------+-------+-------+
+```
+
+
 ## 常见错误及解决方法
 
 1. ERROR 2003 (HY000): Can't connect to MySQL server on 'localhost' (10061)
